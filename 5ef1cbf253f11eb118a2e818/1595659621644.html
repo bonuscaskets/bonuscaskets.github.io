@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous"><style>
+  p {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+  }
+</style>
+<title>test page</title>
+<div class="p-3">
+  <div class="p-2 mb-3 bg-light" 
+    style="color:#000000">
+
+    <div class="d-flex justify-content-center"
+    >
+      <div class="d-flex flex-column ml-2 mr-2 text-center">
+        <div style="font-size: 50px; width: 80px;">
+          <strong id="countdown_0_days"></strong>
+        </div>
+        <div style="font-size: 16px; width: 80px;">
+          <strong>Days</strong>
+        </div>
+      </div>
+      <div class="d-flex flex-column ml-2 mr-2 text-center">
+        <div style="font-size: 50px; width: 80px;">
+         <strong id="countdown_0_hours"></strong>
+        </div>
+        <div style="font-size: 16px; width: 80px;">
+          <strong>Hours</strong>
+        </div>
+      </div>
+      <div class="d-flex flex-column ml-2 mr-2 text-center">
+        <div style="font-size: 50px; width: 80px;">
+          <strong id="countdown_0_min"></strong>
+        </div>
+        <div style="font-size: 16px; width: 80px;">
+          <strong>Mins</strong>
+        </div>
+      </div>
+      <div class="d-flex flex-column ml-2 mr-2 text-center">
+        <div style="font-size: 50px; width: 80px;">
+          <strong id="countdown_0_sec"></strong>
+        </div>
+        <div style="font-size: 16px; width: 80px;">
+          <strong class="text-center">Secs</strong>
+        </div>
+      </div>
+      
+    </div>
+  </div></div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+<script>
+  const setDate = 1595659633911
+  const timerCount = 1
+  const setHours = 5;
+  const isThrive = false;
+  
+  let timerExpireDate = new Date(setDate);
+  timerExpireDate.setHours(timerExpireDate.getHours() + setHours);
+  
+  let loop = 1;
+  let countDownDate;
+  let originalDate;
+  let nowDate = new Date();
+  
+  if ((nowDate.getTime() >= timerExpireDate.getTime()) && isThrive) {
+
+    const length = nowDate.getTime() - timerExpireDate.getTime();
+    const passed = length % (3.6e6 * setHours);
+    const newDate = new Date();
+    newDate.setHours(newDate.getHours() + setHours);
+    countDownDate = newDate.getTime() - passed;
+    originalDate = new Date(countDownDate);
+  } else {
+    countDownDate = timerExpireDate;
+    originalDate = timerExpireDate;
+  }
+
+  const updateTime = () => {
+    // Get today's date and time
+    let now = new Date();
+  
+    // Find the distance between now and the count down date
+    const distance = countDownDate - now.getTime();
+    
+     // If the count down is finished, write some text 
+    if (distance <= 0) {
+      if (!isThrive) {
+        clearInterval(x);
+        for (i = 0; i < timerCount; i++) {
+          document.getElementById("countdown_" + i + "_days").innerHTML = '00'
+          document.getElementById("countdown_" + i + "_hours").innerHTML = '00'
+          document.getElementById("countdown_" + i + "_min").innerHTML = '00'
+          document.getElementById("countdown_" + i + "_sec").innerHTML = '00'
+        }
+      } else {
+        // Fire up again if THRIVE
+        countDownDate = originalDate.getTime() + loop * setHours * 3.6e6
+        loop += 1;
+      }
+    } else {
+       // Time calculations for days, hours, minutes and seconds
+      let days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    
+      // Add leading zeros
+      days = days < 10 ? "0" + days.toString() : days.toString();
+      hours = hours < 10 ? "0" + hours.toString() : hours.toString();
+      minutes = minutes < 10 ? "0" + minutes.toString() : minutes.toString();
+      seconds = seconds < 10 ? "0" + seconds.toString() : seconds.toString();
+  
+      // Display the result in the element with id="coutdown_i"
+      for (i = 0; i < timerCount; i++) {
+        document.getElementById("countdown_" + i + "_days").innerHTML = days
+        document.getElementById("countdown_" + i + "_hours").innerHTML = hours
+        document.getElementById("countdown_" + i + "_min").innerHTML = minutes
+        document.getElementById("countdown_" + i + "_sec").innerHTML = seconds
+      }
+    }
+  }
+
+  updateTime();
+  
+  // Update the count down every 1 second
+  const x = setInterval(function() {
+    updateTime()
+  }, 1000);</script>
